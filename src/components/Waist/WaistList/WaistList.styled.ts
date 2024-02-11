@@ -10,7 +10,6 @@ export const ImgWaist = styled.img`
     display: block;
     width: 530px;
     height: 902px;
-    /* margin-top: -100px; */
     z-index: -2;
   }
 `;

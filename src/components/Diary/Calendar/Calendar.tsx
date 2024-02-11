@@ -156,11 +156,3 @@ const MyCalendar:React.FC=() =>{
 
 
 
-
-//     color: '#EFEDE8',
-// fontFamily: 'Roboto',
-// fontSize: '14px',
-// fontStyle: 'normal',
-// fontWeight:'400',
-// lineHeight: '18px',
-// letterSpacing: '-0.28px'

@@ -43,6 +43,7 @@
 - [Anastasiia Khmelenko](https://github.com/anastasiiahmel)
 - [Oleksandr Rudenko](https://github.com/ruden4)
 - [Vladyslav Svitlychnyi](https://github.com/Svitly4nyi-Vla2yslav)
+- [Dmytro Kushnaruk](https://github.com/Dmitro-KDV)
 
 #### Backend:
 - [Kseniia Yaresko - Backend Lead](https://github.com/Ksuyaresko)

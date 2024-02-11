@@ -1,30 +1,31 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
+import { palette } from '../../../styles';
 
 const Item = styled.li`
   width: 100%;
   height: 150px;
   padding: 16px;
-  border: 1px solid #efede833;
+  border: 1px solid ${palette.colors.white20};
 
   border-radius: 12px;
-  background-color: #efede80d;
+  background-color: ${palette.colors.white5};
   transition-duration: 150ms;
 
-  @media screen and (min-width: 376px) {
+  @media screen and (min-width: 375px) {
     width: 335px;
   }
 
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 768px) {
     height: 160px;
   }
 
-  @media screen and (min-width: 1441px) {
+  @media screen and (min-width: 1440px) {
     width: 405px;
   }
 
   &:hover {
-    background-color: #efede80a;
+    background-color: ${palette.colors.white5};
   }
 `;
 
@@ -41,7 +42,7 @@ const Badge = styled.p`
   font-size: 12px;
   line-height: calc(14 / 12);
 
-  background-color: #efede80d;
+  background-color: ${palette.colors.white5};
   border-radius: 4px;
 `;
 
@@ -75,14 +76,18 @@ const AddButton = styled(Button)`
 
   font-size: 14px;
   line-height: calc(18 / 14);
-  color: #e6533c;
+  color: ${palette.colors.orange};
 
   &:hover {
-    color: #efede8 !important;
+    color: ${palette.colors.white} !important;
     transform: translateX(5px);
+
+    svg {
+      stroke: ${palette.colors.white};
+    }
   }
 
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 768px) {
     font-size: 16px;
     line-height: calc(24 / 16);
   }
@@ -107,12 +112,12 @@ const Name = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
 
-  @media screen and (min-width: 376px) {
+  @media screen and (min-width: 375px) {
     font-size: 20px;
     line-height: calc(24 / 20);
   }
 
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 768px) {
     font-size: 24px;
     line-height: calc(32 / 24);
   }
@@ -127,7 +132,7 @@ const NameIconWrapper = styled.span`
   width: 24px;
   height: 24px;
 
-  background-color: #efa082;
+  background-color: ${palette.colors.beige};
   border-radius: 50%;
 `;
 
@@ -146,22 +151,22 @@ const SpecificationsItem = styled.li`
 `;
 
 const SpecificationName = styled.p`
-  color: #efede866;
+  color: ${palette.colors.white40};
 `;
 
 const SpecificationValue = styled.p`
-  color: #efa082;
+  color: ${palette.colors.beige};
   text-transform: capitalize;
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: 30px;
   white-space: nowrap;
 
-  @media screen and (min-width: 376px) {
+  @media screen and (min-width: 375px) {
     max-width: 70px;
   }
 
-  @media screen and (min-width: 1441px) {
+  @media screen and (min-width: 1440px) {
     max-width: 120px;
   }
 `;

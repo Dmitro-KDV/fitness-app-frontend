@@ -1,4 +1,7 @@
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useExercises } from '../../../hooks';
+import { setFilters } from '../../../redux/exercises';
 
 import {
   ExercisesListItem,
@@ -10,20 +13,22 @@ import {
 
 interface ExercisesItemProps {
   name: string;
-  filter: string;
   img: string;
+  filter: string;
 }
 
-const ExercisesItem: React.FC<ExercisesItemProps> = ({ name, filter, img }) => {
-  
-  // const navigate = useNavigate();
+const ExercisesItem: React.FC<ExercisesItemProps> = ({ name, img, filter }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { exercisesFilters } = useExercises();
 
-  // const onClick = () => {
-  //   navigate(`/exercises/${name}`, { replace: true })
-  // }
+  const onClick = () => {
+    navigate(`/exercises/${exercisesFilters.filter}/${name}`);
+    dispatch(setFilters(exercisesFilters.filter, name));
+  };
 
   return (
-    <ExercisesListItem>
+    <ExercisesListItem onClick={onClick}>
       <ItemTextWrapper>
         <ListItemTitle>{name}</ListItemTitle>
         <ListItemCategory>{filter}</ListItemCategory>

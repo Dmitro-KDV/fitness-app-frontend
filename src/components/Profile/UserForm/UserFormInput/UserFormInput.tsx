@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BlockWrapInput,
   Label,
@@ -7,9 +6,10 @@ import {
   LabelWrapBlock,
 } from './UserFormInput.styled';
 import { StyledInput } from '../../../InputPrimary/InputPrimary.styled';
+import { DatePicker } from '../DatePicker';
+
 import { User } from '../../../../redux/auth/types';
 import { FormikValues } from 'formik';
-// import { DatePicker } from 'antd';
 
 const UserFormInput: React.FC<{ formik: FormikValues; user: User }> = ({
   formik,
@@ -101,28 +101,10 @@ const UserFormInput: React.FC<{ formik: FormikValues; user: User }> = ({
             )}
           </LabelWrap>
           <LabelWrap>
-            <Label htmlFor="birthday">Date of birth</Label>
-            <StyledInput
-              bordercolor={
-                formik.errors.birthday && formik.touched.birthday
-                  ? 'error'
-                  : 'default'
-              }
-              id="birthday"
-              name="birthday"
-              type="date"
-              onChange={formik.handleChange}
-              value={formik.values.birthday}
-            />
-
-            {/* <DatePicker
-              id="birthday"
-              name="birthday"
-              // type="date"
-              size="large"
-              onChange={formik.handleChange}
-              // value={formik.values.birthday}
-            /> */}
+            <Label htmlFor="birthday">
+              Date of birth
+              <DatePicker formik={formik} />
+            </Label>
 
             {formik.errors.birthday && formik.touched.birthday && (
               <ErrorText>{formik.errors.birthday}</ErrorText>

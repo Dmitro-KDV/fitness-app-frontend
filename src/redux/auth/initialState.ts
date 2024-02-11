@@ -3,18 +3,19 @@ import { User, InitialAuthState } from './types';
 const user: User = {
   email: '',
   name: '',
-  dailyCalories: '',
-  dailyActivity: '',
+  dailyCalories: 0,
+  dailyActivity: 0,
   settings: {
-    height: '',
-    currentWeight: '',
-    desiredWeight: '',
+    height: 0,
+    currentWeight: 0,
+    desiredWeight: 0,
     birthday: '',
-    blood: '',
+    blood: 0,
     sex: '',
     levelActivity: '',
   },
   avatarURL: '',
+  verify: false,
 };
 
 const initialState: InitialAuthState = {

@@ -1,10 +1,30 @@
-import { Container, Welcome } from '../components';
+import { useEffect } from 'react';
+import { useAuth } from '../hooks';
+
+import { Welcome, ContainerAuth } from '../components';
+import { callToast } from '../helpers';
 
 const WelcomePage: React.FC = () => {
+  const { isRefreshing, error } = useAuth();
+
+  useEffect(() => {
+    if (isRefreshing || error === 'Unable to get current user') {
+      const timeout = setTimeout(() => {
+        callToast(
+          'loading',
+          'If you are experiencing a long load time, please wait, our servers go into hibernation when not in use for a long time and need time to get up and running.',
+          10000
+        );
+      }, 5000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isRefreshing, error]);
+
   return (
-    <Container>
+    <ContainerAuth>
       <Welcome />
-    </Container>
+    </ContainerAuth>
   );
 };
 

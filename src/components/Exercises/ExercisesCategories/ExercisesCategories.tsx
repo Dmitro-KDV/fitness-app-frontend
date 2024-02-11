@@ -1,45 +1,52 @@
-import { Tabs } from 'antd';
-import type { TabsProps } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { Category } from '../Exercises';
-
 import { CategoryList } from './ExercisesCategories.styled';
-import { Dispatch, SetStateAction } from 'react';
+import { Tabs } from 'antd';
 
-interface ExercisesCategoriesProps {
-  changeCategory: Dispatch<SetStateAction<Category>>;
-  setPage: Dispatch<SetStateAction<number>>;
-}
+import type { TabsProps } from 'antd';
+import { setFilters } from '../../../redux/exercises';
+import { AppDispatch } from '../../../redux';
 
-const ExercisesCategories: React.FC<ExercisesCategoriesProps> = ({changeCategory, setPage}) =>
-  {
-  const onChange = (key) => {
-      changeCategory(key);
-      setPage(1);
-    };
+const ExercisesCategories: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
-    const items: TabsProps['items'] = [
-      {
-        key: 'Body parts',
-        label: 'Body parts',
-        children: 'Content of Body parts',
-      },
-      {
-        key: 'Muscles',
-        label: 'Muscles',
-        children: 'Content of Muscles',
-      },
-      {
-        key: 'Equipment',
-        label: 'Equipment',
-        children: 'Content of Equipment',
-      },
-    ];
-    return (
-      <CategoryList>
-        <Tabs defaultActiveKey="Body parts" items={items} onChange={onChange} />
-      </CategoryList>
-    );
+  const onChange = (key: Category) => {
+    dispatch(setFilters(key, ''));
+    navigate(`/exercises/${key}`);
   };
+
+  const items: TabsProps['items'] = [
+    {
+      key: 'bodyPart',
+      label: 'Body parts',
+      children: 'Content of Body parts',
+    },
+    {
+      key: 'muscles',
+      label: 'Muscles',
+      children: 'Content of Muscles',
+    },
+    {
+      key: 'equipment',
+      label: 'Equipment',
+      children: 'Content of Equipment',
+    },
+  ];
+
+  return (
+    <CategoryList>
+      <Tabs
+        defaultActiveKey={'bodyPart'}
+        items={items}
+        onChange={value => {
+          onChange?.(value as Category);
+        }}
+      />
+    </CategoryList>
+  );
+};
 
 export default ExercisesCategories;

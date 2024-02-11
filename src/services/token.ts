@@ -1,14 +1,17 @@
-import axios from 'axios';
 
-const setToken = (token: string | null) => {
-  if (token) axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+const setToken = (accessToken: string | null, refreshToken: string | null) => {
+  if (accessToken && refreshToken)
+    localStorage.setItem(
+      'session',
+      JSON.stringify({ accessToken, refreshToken })
+    );
 };
-
 
 const clearToken = () => {
-  axios.defaults.headers.common.Authorization = null;
+  localStorage.removeItem('session');
 };
 
-
-
-export { setToken, clearToken  };
+const getToken = () => {
+  return localStorage.getItem('session');
+}
+export { setToken, clearToken, getToken };

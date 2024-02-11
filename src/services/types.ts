@@ -9,6 +9,9 @@ interface ApiServiceOptions {
   url: string;
   data?: { [key: string]: unknown } | unknown;
   config?: RequestConfig;
+  params?: {
+    [k: string]: string;
+  };
 }
 
 interface ApiServiceResponse<T> {
@@ -17,4 +20,28 @@ interface ApiServiceResponse<T> {
   token?: string;
 }
 
-export type { ApiServiceOptions, ApiServiceResponse };
+interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface SignUpArgs {
+  name: string;
+  email: string;
+  password: string;
+  [key: string]: unknown;
+}
+
+interface SignInArgs {
+  email: string;
+  password: string;
+  [key: string]: unknown;
+}
+
+export type {
+  ApiServiceOptions,
+  ApiServiceResponse,
+  AuthResponse,
+  SignUpArgs,
+  SignInArgs,
+};

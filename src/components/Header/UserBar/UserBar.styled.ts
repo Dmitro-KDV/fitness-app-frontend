@@ -1,25 +1,42 @@
 import styled from '@emotion/styled';
-import { palette } from '../../../styles/theme';
+import { keyframes } from '@emotion/react';
+import { palette } from '../../../styles';
 import { Link } from 'react-router-dom';
 
-export const SettingsLink = styled(Link)`
-  &.active {
-    background-color: ${palette.colors.red};
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
   }
-  &:hover,
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const SettingsLink = styled(Link)`
+  &:active,
   &:focus {
     svg {
-      stroke: ${palette.colors.red};
+      stroke: ${palette.colors.orange};
+    }
+  }
+
+  &:hover {
+    svg {
+      stroke: ${palette.colors.orange};
+      animation: ${rotate} 2s linear infinite;
     }
   }
 `;
-export const LinkStyled = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const LinkStyled = styled(Link)`
   width: 37px;
   height: 37px;
   border: 1px solid ${palette.colors.orange};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   border-radius: 50%;
   background-color: rgba(48, 48, 48, 0.3);
 
@@ -28,3 +45,17 @@ export const LinkStyled = styled(Link)`
     height: 46px;
   }
 `;
+
+const Avatar = styled.img`
+  width: 37px;
+  height: 37px;
+  border: 1px solid ${palette.colors.orange};
+  border-radius: 50%;
+
+  @media screen and (min-width: 768px) {
+    width: 46px;
+    height: 46px;
+  }
+`;
+
+export { SettingsLink, LinkStyled, Avatar };

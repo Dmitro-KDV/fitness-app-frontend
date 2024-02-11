@@ -1,68 +1,59 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
-
-import { apiService } from '../../services';
-
-import { PageTitle } from '..';
-import { ExercisesSlider } from './ExercisesSlider';
 import { ExercisesCategories } from './ExercisesCategories';
+import { PageTitle } from '..';
+import { ExercisesWrap, TopWrap, BackgroundImage } from './Exercises.styled';
 
-import { ExercisesWrap, TopWrap, LoaderWrap } from './Exercises.styled';
+import { setFilters } from '../../redux/exercises';
+import bg from '../../assets/images/ImgForWelcomePage/ImgForWelcomePageMob.webp';
+import { useExercises } from '../../hooks';
 
-export type Category = 'Body parts' | 'Muscles' | 'Equipment';
+export type Category = 'bodyPart' | 'muscles' | 'equipment';
 
 const Exercises: React.FC = () => {
-  
-  const [currentCategory, setCurrentCategory] = useState<Category>('Body parts');
-  const [exercisesList, setExercisesList] = useState([]);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [total, setTotal] = useState<number>(1);
-  
+  const [backgound, setBackground] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { exercisesFilters } = useExercises();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setFilters('bodyPart', exercisesFilters.category));
+    if (
+      location.pathname !== '/exercises' &&
+      location.pathname !== '/exercises/bodyPart' &&
+      location.pathname !== '/exercises/muscles' &&
+      location.pathname !== '/exercises/equipment'
+    ) {
+      setBackground(true);
+    } else {
+      setBackground(false);
+    }
 
-    window.screen.width >= 768 && window.screen.width < 1440 ? setLimit(9) : setLimit(10);
-
-    const responce = apiService({
-      method: 'get', url: `/exercises/${currentCategory}?page=${page}&limit=${limit}`
-    });
-    setIsLoading(true);
-    responce
-      .then(({ data, totalItems }) => {
-        setExercisesList(data)
-        setTotal(totalItems)
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setIsLoading(false));
-  },[currentCategory, limit, page, total])
+    if (location.pathname === `/exercises`) navigate('/exercises/bodyPart');
+  }, [
+    dispatch,
+    exercisesFilters.category,
+    exercisesFilters.filter,
+    location.pathname,
+    navigate,
+  ]);
 
   return (
     <ExercisesWrap>
-      
       <TopWrap>
-          {isLoading &&
-        <LoaderWrap>
-            <Spin indicator={<LoadingOutlined style={{ fontSize: 34 }} spin />} />
-        </LoaderWrap>}
         <PageTitle text={'Exercises'} />
-        <ExercisesCategories
-          changeCategory={setCurrentCategory}
-          setPage={setPage}
-        />
+        <ExercisesCategories />
       </TopWrap>
-      <ExercisesSlider
-        exercisesList={exercisesList}
-        currentCategory={currentCategory}
-        setPage={setPage}
-        total={total}
-        limit={limit}
-        isLoading={isLoading} />
+      {backgound && (
+        <BackgroundImage>
+          <img src={bg} alt="woman" />
+        </BackgroundImage>
+      )}
+      <Outlet />
     </ExercisesWrap>
   );
 };
-
 export default Exercises;

@@ -1,5 +1,15 @@
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useExercises } from '../../../hooks';
+
+import { Exercise } from '../../../redux/exercises/types';
+import { Icon } from '../../';
+
+import { setBurnedCalories } from '../../../redux/exercises/operations.ts';
+import { AppDispatch } from '../../../redux/store.ts';
+
 import {
-  BtnLabel,
+  AddButton,
   BtnWrapper,
   CardLabel,
   ExercisesTitleBox,
@@ -7,15 +17,11 @@ import {
   ListItem,
   ListItemValue,
   SpanExerciseRun,
-  SvgExercise,
-  SvgExerciseRun,
   Title,
   WaistItemLi,
 } from './WaistItem.styled';
-import sprite from '../../../assets/images/sprite.svg';
-
-import React from 'react';
-import { WaistExercises } from '../../../redux/Waist/types';
+import { AddExerciseModal } from '../AddExerciseModal';
+import { ExerciseAddedModal } from '../ExerciseAddedMo.styled.ts';
 
 interface List {
   burnedCalories: string;
@@ -23,8 +29,8 @@ interface List {
   target: string;
 }
 
-export interface WaistProps {
-  waistItem: WaistExercises;
+interface WaistProps {
+  exercise: Exercise;
 }
 interface Texts {
   cardLabel: string;
@@ -41,48 +47,77 @@ const texts: Texts = {
     target: 'Target:',
   },
 };
-const WaistItem: React.FC<WaistProps> = ({ waistItem }) => {
-  const { name, burnedCalories, target, bodyPart } = waistItem;
+
+const WaistItem: React.FC<WaistProps> = ({ exercise }) => {
+  const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { burnedCalories } = useExercises();
+
+  useEffect(() => {
+    if (burnedCalories && isFirstModalOpen) {
+      setIsFirstModalOpen(false);
+      setIsSecondModalOpen(true);
+    }
+  }, [burnedCalories, isFirstModalOpen]);
+
+  const handleSecondModalClose = () => {
+    setIsSecondModalOpen(false);
+    dispatch(setBurnedCalories(0));
+  };
+
   return (
     <>
       <WaistItemLi>
         <BtnWrapper>
           <CardLabel>{texts.cardLabel}</CardLabel>
-          <BtnLabel type="button">
-            {texts.btnLabel}
-            <span>
-              <SvgExercise>
-                <use href={`${sprite}#icon-arrow-right`}></use>
-              </SvgExercise>
-            </span>
-          </BtnLabel>
+          <AddButton type="text" onClick={() => setIsFirstModalOpen(true)}>
+            Add
+            <Icon
+              name="arrow-secondary"
+              iconWidth={{ mobile: '16px', tablet: '16px' }}
+              stroke={'#e6533c'}
+            />
+          </AddButton>
         </BtnWrapper>
         <ExercisesTitleBox>
           <SpanExerciseRun>
-            <SvgExerciseRun width={24} height={24}>
-              <use href={`${sprite}#icon-running`}></use>
-              <use href={`${sprite}#icon-running-figure`}></use>
-            </SvgExerciseRun>
+            <Icon
+              iconWidth={{ mobile: '16px', tablet: '16px' }}
+              iconHeight={{ mobile: '16px', tablet: '16px' }}
+              name="running"
+              fill="#EFEDE8"
+            />
           </SpanExerciseRun>
-          <Title>{name}</Title>
+          <Title>{exercise.name}</Title>
         </ExercisesTitleBox>
         <List>
           <ListItem>
             {texts.list.burnedCalories}
-            <ListItemValue>{burnedCalories}</ListItemValue>
+            <ListItemValue>{exercise.burnedCalories}</ListItemValue>
           </ListItem>
           <ListItem>
             {texts.list.bodyPart}
-            <ListItemValue>{bodyPart}</ListItemValue>
+            <ListItemValue>{exercise.bodyPart}</ListItemValue>
           </ListItem>
           <ListItem>
             {texts.list.target}
-            <ListItemValue>{target}</ListItemValue>
+            <ListItemValue>{exercise.target}</ListItemValue>
           </ListItem>
         </List>
       </WaistItemLi>
+      <AddExerciseModal
+        open={isFirstModalOpen}
+        exercise={exercise}
+        handleCancel={() => setIsFirstModalOpen(false)}
+      />
+      <ExerciseAddedModal
+        open={isSecondModalOpen}
+        handleClose={handleSecondModalClose}
+      />
     </>
   );
 };
 
 export default WaistItem;
+export type { WaistProps };

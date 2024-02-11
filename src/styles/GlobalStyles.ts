@@ -7,11 +7,16 @@ const GlobalStyles = css`
     src: url(${Roboto}) format('truetype');
   }
 
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
   body {
-    min-height: 100vh;
     font-family: 'Roboto', sans-serif;
     background-color: #040404;
-    color: #efede8;
+    color: #efedee;
     scroll-behavior: smooth;
   }
 
@@ -42,6 +47,11 @@ const GlobalStyles = css`
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    appearance: none;
   }
 
   .scrollbar-inner {
@@ -92,6 +102,18 @@ const GlobalStyles = css`
         display: none;
       }
     }
+  }
+
+  .ant-popover-inner,
+  .ant-tour-inner,
+  .ant-popconfirm-title,
+  .ant-popconfirm-description {
+    background-color: #1c1c1c !important;
+    color: #efedee !important;
+  }
+
+  .ant-picker-header-view {
+    color: #efedee;
   }
 `;
 

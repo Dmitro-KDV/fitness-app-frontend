@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useAuth, useProducts } from '../../../hooks';
+import { useDispatch } from 'react-redux';
 
 import {
   Item,
@@ -18,10 +20,8 @@ import {
 } from './ProductsItem.styled';
 import { Icon } from '../../Icon';
 import { Product } from '../../../redux/products/types';
-import { useAuth } from '../../../hooks';
 import { AddProductModal, ProductAddedModal } from '..';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectCalculatedCalories } from '../../../redux/products/selectors';
+
 import { AppDispatch } from '../../../redux';
 import { setCalculatedCalories } from '../../../redux/products';
 
@@ -30,14 +30,13 @@ interface ProductsItemProps {
 }
 
 const ProductsItem: React.FC<ProductsItemProps> = ({ product }) => {
-  const [buttonHover, setButtonHover] = useState<boolean>(false);
   const [isFirstModalOpen, setIsFirstModalOpen] = useState<boolean>(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
   const { groupBloodNotAllowed } = product;
+  const { calculatedCalories } = useProducts();
   const { user } = useAuth();
   const userBloodGroup = user.settings.blood;
-  const calculatedCalories = useSelector(selectCalculatedCalories);
-  const dispatch = useDispatch<AppDispatch>();
 
   const isRecommended = userBloodGroup
     ? groupBloodNotAllowed[userBloodGroup]
@@ -64,17 +63,12 @@ const ProductsItem: React.FC<ProductsItemProps> = ({ product }) => {
             <StatusRound recommended={isRecommended || false}></StatusRound>
             {isRecommended ? 'Recommended' : 'Not recommended'}
           </Status>
-          <AddButton
-            type="text"
-            onMouseEnter={() => setButtonHover(true)}
-            onMouseLeave={() => setButtonHover(false)}
-            onClick={() => setIsFirstModalOpen(true)}
-          >
+          <AddButton type="text" onClick={() => setIsFirstModalOpen(true)}>
             Add
             <Icon
               name="arrow-secondary"
               iconWidth={{ mobile: '16px', tablet: '16px' }}
-              stroke={buttonHover ? '#efede8' : '#e6533c'}
+              stroke={'#e6533c'}
             />
           </AddButton>
         </TopRow>

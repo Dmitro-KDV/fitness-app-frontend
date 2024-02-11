@@ -1,28 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { List, ListWrapper } from './ProductsList.styled';
 import { NotFoundMessage, ProductsItem } from '..';
-
-import {
-  getProducts,
-  getProductsByPage,
-  selectFilters,
-  selectIsLoading,
-  selectProducts,
-} from '../../../redux/products';
-import { AppDispatch } from '../../../redux';
-import throttle from 'lodash.throttle';
 import { Loader } from '../..';
 
+import { getProducts, getProductsByPage } from '../../../redux/products';
+import { AppDispatch } from '../../../redux';
+import throttle from 'lodash.throttle';
+import { useProducts } from '../../../hooks';
+
 const ProductsList: React.FC = () => {
+  const [showNotFound, setShowNotFound] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const products = useSelector(selectProducts);
-  const isLoading = useSelector(selectIsLoading);
+  const { products, isLoading, filters } = useProducts();
   const productsListRef = useRef<HTMLUListElement>(null);
   const pageRef = useRef<number>(1);
-  const filters = useSelector(selectFilters);
-  const [showNotFound, setShowNotFound] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -69,7 +62,7 @@ const ProductsList: React.FC = () => {
     if (!products.length && !isLoading) {
       const timeoutId = setTimeout(() => {
         setShowNotFound(true);
-      }, 1000);
+      }, 100);
 
       return () => {
         clearTimeout(timeoutId);
@@ -79,12 +72,18 @@ const ProductsList: React.FC = () => {
     }
   }, [products, isLoading]);
 
+  const filteredProducts = products.filter(({ title }) =>
+    filters.search
+      ? title.toLowerCase().includes(filters.search.toLowerCase())
+      : products
+  );
+
   return (
     <ListWrapper>
       {showNotFound && <NotFoundMessage />}
       <List className="scrollbar-outer" ref={productsListRef}>
-        {products.map((product, index) => (
-          <ProductsItem product={product} key={index} />
+        {filteredProducts.map(product => (
+          <ProductsItem product={product} key={product._id} />
         ))}
         {isLoading && <Loader />}
       </List>

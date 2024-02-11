@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../../hooks';
-import { useDispatch } from 'react-redux';
 import routes from '../../../routes';
-import { AppDispatch } from '../../../redux';
-import { getCurrentUser } from '../../../redux/auth';
 
 import UserBar from '../UserBar/UserBar';
 import UserNav from '../UserNav/UserNav';
@@ -11,7 +8,6 @@ import LogOutBtn from '../../LogoutBtn/LogoutBtn';
 import MobileMenuBtn from '../MobileMenuBtn/MobileMenuBtn';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import Icon from '../../Icon/Icon';
-import { Container } from '../..';
 import {
   HeaderContainer,
   LinkLogo,
@@ -19,31 +15,28 @@ import {
   HeaderWrap,
   UserBarWrapper,
   NavWrap,
+  Wrapper,
 } from './Header.styled';
+import ContainerAuth from '../../Container/ContainerAuth';
 
 const Header: React.FC = () => {
   const { isLoggedIn, isRefreshing } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    dispatch(getCurrentUser({}));
-  }, [dispatch, isLoggedIn]);
-
   return (
-    <div
+    <Wrapper
       style={
         isLoggedIn
           ? { borderBottom: '1px solid rgba(239, 237, 232, 0.20)' }
           : { borderBottom: 'none' }
       }
     >
-      <Container>
-        <HeaderContainer>
+      <ContainerAuth>
+        <HeaderContainer isLoggedIn={isLoggedIn}>
           <HeaderWrap>
             <LinkLogo
               to={!isLoggedIn && !isRefreshing ? routes.WELCOME : routes.DIARY}
@@ -71,8 +64,8 @@ const Header: React.FC = () => {
             )}
           </HeaderWrap>
         </HeaderContainer>
-      </Container>
-    </div>
+      </ContainerAuth>
+    </Wrapper>
   );
 };
 

@@ -1,11 +1,12 @@
-import { SignInArgs, SignUpArgs } from '../../services/apiRequest';
+import { SignInArgs, SignUpArgs } from '../../services/types';
 import { operationWrapper } from '../../helpers';
 import { apiService, clearToken, setToken } from '../../services';
 import { callToast } from '../../helpers';
+import { getToken } from '../../services/token.ts';
 
 const registerUser = operationWrapper(
   'auth/register',
-  async (data: SignUpArgs) => {
+  async (data: SignUpArgs, { dispatch }) => {
     const response = await apiService(
       {
         method: 'post',
@@ -26,56 +27,55 @@ const registerUser = operationWrapper(
       }
     );
 
-    setToken(response.data.token);
+    setToken(response.data.accessToken, response.data.refreshToken);
+    dispatch(getCurrentUser({}));
+
     return response.data;
   }
 );
 
-const loginUser = operationWrapper('auth/login', async (data: SignInArgs) => {
-  const response = await apiService(
-    {
-      method: 'post',
-      url: 'users/login',
-      data,
-    },
-    error => {
-      if (error.response && error.response.status === 401) {
-        callToast('error', 'Login or password is incorrect');
-      } else {
-        callToast(
-          'error',
-          'An unknown error occurred, please reload the page and try again'
-        );
+const loginUser = operationWrapper(
+  'auth/login',
+  async (data: SignInArgs, { dispatch }) => {
+    const response = await apiService(
+      {
+        method: 'post',
+        url: 'users/login',
+        data,
+      },
+      error => {
+        if (error.response && error.response.status === 404) {
+          callToast('error', 'Login or password is incorrect');
+        } else {
+          callToast(
+            'error',
+            'An unknown error occurred, please reload the page and try again'
+          );
+        }
+
+        return '';
       }
+    );
 
-      return '';
-    }
-  );
-
-  setToken(response.data.token);
-  return response.data;
-});
+    setToken(response.data.accessToken, response.data.refreshToken);
+    dispatch(getCurrentUser({}));
+    return response.data;
+  }
+);
 
 const getCurrentUser = operationWrapper(
   'auth/getCurrentUser',
   async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const token = state.auth.token;
-
+    const token = getToken();
     if (!token) return thunkAPI.rejectWithValue('Unable to refresh user');
-    setToken(token);
 
     const response = await apiService(
       {
         method: 'get',
         url: 'users/current',
       },
-      error => {
-        error.response &&
-          error.response.status === 401 &&
-          callToast('error', 'Session expired, please log in again', 1000 * 60);
+      () => {
         clearToken();
-
         return '';
       }
     );
@@ -92,4 +92,55 @@ const logOutUser = operationWrapper('auth/logout', async () => {
   clearToken();
 });
 
-export { registerUser, loginUser, getCurrentUser, logOutUser };
+const getUserValue = operationWrapper(
+  'profile/getUserValue',
+  async userData => {
+    const { data } = await apiService(
+      {
+        method: 'patch',
+        url: '/users',
+        data: userData,
+      },
+      () => {
+        callToast('error', 'Request error, try again');
+        return '';
+      }
+    );
+    return data;
+  }
+);
+
+const getUserAvatar = operationWrapper(
+  'profile/getUserAvatar',
+  async dataFile => {
+    const { data } = await apiService(
+      {
+        method: 'post',
+        url: '/users/avatars',
+        data: dataFile,
+        config: {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      },
+      () => {
+        callToast(
+          'error',
+          'Please upload a valid format of image and try again'
+        );
+        return '';
+      }
+    );
+    return data;
+  }
+);
+
+export {
+  registerUser,
+  loginUser,
+  getCurrentUser,
+  logOutUser,
+  getUserValue,
+  getUserAvatar,
+};

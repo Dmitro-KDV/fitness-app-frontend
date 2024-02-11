@@ -1,13 +1,8 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useProducts } from '../../../hooks';
 
 import { FilterDropdown } from '..';
-import {
-  selectCategories,
-  selectFilters,
-} from '../../../redux/products/selectors';
-import { AppDispatch } from '../../../redux';
-import { getProductsCategories, setFilters } from '../../../redux/products';
 import { SearchFilter } from '../SearchFilter';
 import {
   DropdownWrapper,
@@ -15,10 +10,12 @@ import {
   SearchWrapper,
 } from './Filters.styled';
 
+import { AppDispatch } from '../../../redux';
+import { getProductsCategories, setFilters } from '../../../redux/products';
+
 const Filters: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const categories = useSelector(selectCategories);
-  const filters = useSelector(selectFilters);
+  const { categories, filters } = useProducts();
 
   useEffect(() => {
     dispatch(getProductsCategories({}));
@@ -41,8 +38,6 @@ const Filters: React.FC = () => {
 
   const setTypeValue = () => {
     switch (filters.type) {
-      case 'all':
-        return 'All';
       case 'recommended':
         return 'Recommended';
       case 'notrecommended':
@@ -57,7 +52,7 @@ const Filters: React.FC = () => {
       </SearchWrapper>
       <DropdownWrapper>
         <FilterDropdown
-          items={categories}
+          items={['All', ...categories]}
           onChange={handleCategoriesChange}
           value={filters.categories || 'Categories'}
         />

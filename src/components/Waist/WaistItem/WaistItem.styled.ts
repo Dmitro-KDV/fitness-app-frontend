@@ -1,28 +1,36 @@
 import styled from '@emotion/styled';
 import { palette } from '../../../styles/index';
+import { Button } from 'antd';
 
 const WaistItemLi = styled.li`
   width: 100%;
   min-height: 141px;
   padding: 16px;
-  border-radius: 12px;
   border: 1px solid ${palette.colors.white30};
-  background: ${palette.colors.gray};
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  @media screen and (max-width: 767px) {
-    margin: 0 auto;
-  }
+
+  border-radius: 12px;
+  background: ${palette.colors.gray};
+  transition-duration: 150ms;
+  text-transform: capitalize;
+
   @media screen and (min-width: 375px) {
     width: 335px;
   }
+
   @media screen and (min-width: 768px) {
-    width: calc((100% - 16px) / 2);
+    height: 160px;
   }
 
   @media screen and (min-width: 1440px) {
-    width: 370px;
+    width: 405px;
+  }
+
+  &:hover {
+    background-color: ${palette.colors.white5};
   }
 `;
 
@@ -38,48 +46,47 @@ const CardLabel = styled.p`
   font-weight: 700;
   line-height: normal;
   color: ${palette.colors.white};
+  text-transform: uppercase;
 
   padding: 5px 7.5px;
   border-radius: 4px;
-  background: rgba(239, 237, 232, 0.05);
-  text-transform: uppercase;
+  background: ${palette.colors.white5};
 `;
 
-const BtnLabel = styled.button`
-  background: transparent;
-  border: none;
-  color: ${palette.colors.orange};
-  font-size: 16px;
-  line-height: 1.5;
+const AddButton = styled(Button)`
   display: flex;
-  align-items: center;
   gap: 8px;
-  padding: 0;
-  transition-duration: 250ms;
+  align-items: center;
+
+  padding: 3px 6px;
+  margin-left: 16px;
+
+  font-size: 14px;
+  line-height: calc(18 / 14);
+  color: ${palette.colors.orange};
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    color: ${palette.colors.white};
-  }
-  &:focus {
-    color: ${palette.colors.white};
-  }
-`;
+    color: ${palette.colors.white} !important;
+    transform: translateX(5px);
 
-const SvgExercise = styled.svg`
-  width: 13px;
-  height: 13px;
+    svg {
+      stroke: ${palette.colors.white};
+    }
+  }
 
   @media screen and (min-width: 768px) {
-    width: 16px;
-    height: 16px;
+    font-size: 16px;
+    line-height: calc(24 / 16);
   }
 `;
+
 const ExercisesTitleBox = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 8px;
 `;
+
 const Title = styled.h3`
   position: relative;
   font-size: 24px;
@@ -96,10 +103,6 @@ const Title = styled.h3`
   }
 `;
 
-const SvgExerciseRun = styled.svg`
-  width: 16px;
-  height: 16px;
-`;
 const SpanExerciseRun = styled.span`
   display: flex;
   justify-content: center;
@@ -112,7 +115,7 @@ const SpanExerciseRun = styled.span`
 
 const List = styled.ul`
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 4px 16px;
 `;
 
@@ -122,11 +125,24 @@ const ListItem = styled.li`
   gap: 4px;
   color: ${palette.colors.white};
   font-size: 12px;
-  line-height: 1.5;
+  line-height: calc(18 / 12);
 `;
 
 const ListItemValue = styled.span`
-  color: ${palette.colors.white30};
+  color: ${palette.colors.beige};
+  text-transform: capitalize;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 30px;
+  white-space: nowrap;
+
+  @media screen and (min-width: 375px) {
+    max-width: 70px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    max-width: 120px;
+  }
 `;
 
 export {
@@ -134,12 +150,10 @@ export {
   ListItemValue,
   List,
   WaistItemLi,
-  BtnLabel,
+  AddButton,
   BtnWrapper,
   CardLabel,
   SpanExerciseRun,
-  SvgExercise,
   ExercisesTitleBox,
   Title,
-  SvgExerciseRun,
 };

@@ -1,43 +1,44 @@
 import styled from '@emotion/styled';
 import { Select } from 'antd';
+import { palette } from '../../../styles';
 
 const StyledSelect = styled(Select)`
   height: 46px;
   width: 100%;
 
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 768px) {
     height: 52px;
   }
 
   .ant-select-selector {
-    color: #efedee;
+    color: ${palette.colors.white};
     font-size: 14px;
     line-height: calc(18 / 14);
     text-transform: capitalize;
 
     background-color: transparent !important;
-    border-color: #efede84d !important;
+    border-color: ${palette.colors.white30} !important;
 
-    @media screen and (min-width: 769px) {
+    @media screen and (min-width: 768px) {
       font-size: 16px;
       line-height: calc(24 / 16);
     }
 
     &:hover,
     :focus {
-      border-color: #e6533c !important;
+      border-color: ${palette.colors.orange} !important;
     }
 
     .ant-select-selection-placeholder {
-      color: #efedee;
+      color: ${palette.colors.white};
     }
 
     .ant-select-selection-item {
-      color: #efedee;
+      color: ${palette.colors.white};
       font-size: 14px;
       line-height: calc(18 / 14);
 
-      @media screen and (min-width: 769px) {
+      @media screen and (min-width: 768px) {
         font-size: 16px;
         line-height: calc(24 / 16);
       }
@@ -47,27 +48,31 @@ const StyledSelect = styled(Select)`
 
 const StyledPopupContent = styled.div`
   .ant-select-item {
-    color: #efede8;
+    color: ${palette.colors.white};
     font-size: 14px;
     line-height: calc(18 / 14);
     text-transform: capitalize;
 
-    @media screen and (min-width: 769px) {
+    @media screen and (min-width: 768px) {
       font-size: 16px !important;
       line-height: calc(24 / 16);
     }
   }
 
   [aria-selected='true'] {
-    background-color: #1c1c1c !important;
+    background-color: ${palette.colors.white5} !important;
 
     .ant-select-item-option-content {
-      color: #e6533c !important;
+      color: ${palette.colors.orange} !important;
     }
   }
 
+  .ant-select-item-option-active {
+    background-color: ${palette.colors.white5} !important;
+  }
+
   .ant-empty-description {
-    color: #efede8 !important;
+    color: ${palette.colors.white} !important;
   }
 `;
 

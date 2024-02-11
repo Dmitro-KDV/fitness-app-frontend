@@ -1,7 +1,15 @@
-import React from "react"
-import { NotFound } from "./DiaryNotFoundItems.styled"
+import { useDiary } from '../../../hooks';
+import { NotFound } from './DiaryNotFoundItems.styled';
+import dayjs from 'dayjs';
 
-const DiaryNotFoundItems: React.FC<{items:string}>=({items})=>{
-return <NotFound>Not found {items}</NotFound>
-}
-export default DiaryNotFoundItems
+const DiaryNotFoundItems: React.FC<{ items: string }> = ({ items }) => {
+  const { selectedDate } = useDiary();
+  const isCurrentDate = dayjs().isSame(dayjs(selectedDate), 'day');
+
+  return (
+    <NotFound>
+      You haven't added any {items} {isCurrentDate ? 'today' : 'on this day'}
+    </NotFound>
+  );
+};
+export default DiaryNotFoundItems;

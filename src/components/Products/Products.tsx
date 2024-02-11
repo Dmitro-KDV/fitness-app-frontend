@@ -4,6 +4,7 @@ import {
   ProductsTitleRow,
   ProductsWrapper,
 } from './Products.styled';
+
 import bg from '../../assets/images/Products/bg@3x.jpg';
 
 const Products: React.FC = () => {
@@ -17,7 +18,7 @@ const Products: React.FC = () => {
         <ProductsList />
       </Container>
       <BackgroundImage>
-        <img src={bg} alt="woman" />
+        <img src={bg} alt="woman" loading="lazy" />
       </BackgroundImage>
     </ProductsWrapper>
   );

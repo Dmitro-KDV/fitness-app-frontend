@@ -1,111 +1,136 @@
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useAuth, useDiary } from '../../hooks';
+
 import {
-    Text,
-    TextWrap,
-    BlockWrap,
-   NextGrayBlock,
-    GrayBlockTitle,
-    RedBlockTitle,
-    AddingTextBlockWrap,
-    AddingBlocksWrap,
-    MainDiaryWrap
-  } from './Diary.styled';
-  import { Icon } from '../Icon';
-import { DiaryNotFoundItems } from './DiaryNotFoundItems';
+  Text,
+  TextWrap,
+  BlockWrap,
+  MainDiaryWrap,
+  DesktopWrap,
+} from './Diary.styled';
+import { Icon } from '../Icon';
 import { DailyStatusBlock } from './DailyStatusBlock';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/rootReducer'
-// import { useEffect } from 'react';
-// import { AppDispatch } from '../../redux'
-// import { getDiary } from '../../redux/dairy';
+import { InfoBoxes } from './InfoBoxes';
 
+import { AppDispatch } from '../../redux';
+import { getDiary } from '../../redux/diary';
+import dayjs from 'dayjs';
+import { convertTime } from '../../helpers';
 
-// import { MyCalendar } from './Calendar';
+const Diary = () => {
+  const { user } = useAuth();
+  const { caloriesBurned, caloriesConsumed, caloriesRemaining, sportsTime } =
+    useDiary();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const Diary = () => {
-  
-    // const dispatch = useDispatch<AppDispatch>();
-    const userData = useSelector((state: RootState) => state.auth.user);
-    // useEffect(() => {
-    //   dispatch(getDiary('21/01/2024'));
-     
-    // }, [dispatch]);
-    return (
-      <>
-      {/* <MyCalendar></MyCalendar> */}
+  const resultSports = Math.sign(sportsTime) === -1;
+  const resultCalories = Math.sign(caloriesRemaining) === 1;
+
+  useEffect(() => {
+    dispatch(getDiary(dayjs().format('DD/MM/YYYY')));
+  }, [dispatch]);
+
+  return (
+    <>
       <MainDiaryWrap>
-      <BlockWrap>
-          <DailyStatusBlock text={'Daily calorie intake'} backgroundColor='#E6533C' textColor='rgba(239, 237, 232, 0.80)' children={   <Icon
-                    name="food"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                  />} value={userData.dailyCalories || 0 }></DailyStatusBlock>
-      <DailyStatusBlock text={'Daily physical activity'} backgroundColor='#E6533C' textColor='rgba(239, 237, 232, 0.80)' children={      <Icon
-                    name="dumbbell"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                  />} whiteSpace='none'  value={(userData.dailyActivity || 0)+ ' min'}></DailyStatusBlock>
-      <DailyStatusBlock text={'Сalories consumed'} children={ <Icon
-                    name="apple"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                  />} value='0'></DailyStatusBlock>
-      <DailyStatusBlock text={'Сalories burned'} children={       <Icon
-                    name="fire"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                  />} value='0'></DailyStatusBlock>
-      <DailyStatusBlock text={'Сalories remaining'} children={<Icon
-                    name="bubble"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                  />} value='0'></DailyStatusBlock>
-      <DailyStatusBlock text={'Sports remaining'} children={ <Icon
-                    name="running-figure"
-                    iconWidth={{ mobile: '20px', tablet: '20px' }}
-                    iconHeight={{ mobile: '20px', tablet: '20px' }}
-                    fill='#EF8964'
-                  />} value='0'></DailyStatusBlock>
-      </BlockWrap>
-            <TextWrap>
-              <Icon
-                name="warning"
-                iconWidth={{ mobile: '24px', tablet: '24px' }}
-                iconHeight={{ mobile: '24px', tablet: '24px' }}
-              />
-              <Text>
-              Record all your meals in the calorie diary every day. This will help you be aware of your nutrition and make informed choices.
-              </Text>
-            </TextWrap>
-            <AddingBlocksWrap>
-            <NextGrayBlock>
-                <AddingTextBlockWrap>
-         <GrayBlockTitle>Products</GrayBlockTitle>  
-                  <RedBlockTitle>Add product
-                  <Icon name='arrow-right'      
-                     iconWidth={{ mobile: '16px', tablet: '16px' }}
-                iconHeight={{ mobile: '16px', tablet: '16px' }}
-               
-                  /></RedBlockTitle>           
-                    </AddingTextBlockWrap>
-                    <DiaryNotFoundItems items='products'/>
-              </NextGrayBlock>
-              <NextGrayBlock>  
-              <AddingTextBlockWrap> 
-                 <GrayBlockTitle>Exercises</GrayBlockTitle> 
-                 <RedBlockTitle>Add exercise 
-                 <Icon name='arrow-right'      
-                     iconWidth={{ mobile: '16px', tablet: '16px' }}
-                iconHeight={{ mobile: '16px', tablet: '16px' }}
-                  />
-                </RedBlockTitle>                
-               </AddingTextBlockWrap>
-               <DiaryNotFoundItems items='exercises'/>
-</NextGrayBlock>
-</AddingBlocksWrap>
-</MainDiaryWrap>
-      </>
-    );
-  };
-  
-  export default Diary;
-  
+        <DesktopWrap>
+          <BlockWrap>
+            <DailyStatusBlock
+              text={'Daily calorie intake'}
+              backgroundColor="#E6533C"
+              textColor="rgba(239, 237, 232, 0.80)"
+              borderColor={'rgba(239, 237, 232, 0.20)'}
+              children={
+                <Icon
+                  name="food"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                />
+              }
+              value={user.dailyCalories || 0}
+            ></DailyStatusBlock>
+            <DailyStatusBlock
+              text={'Daily physical activity'}
+              backgroundColor="#E6533C"
+              borderColor={'rgba(239, 237, 232, 0.20)'}
+              textColor="rgba(239, 237, 232, 0.80)"
+              children={
+                <Icon
+                  name="dumbbell"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                />
+              }
+              whiteSpace="none"
+              value={(user.dailyActivity || 0) + ' min'}
+            ></DailyStatusBlock>
+            <DailyStatusBlock
+              borderColor={'rgba(239, 237, 232, 0.20)'}
+              text={'Сalories consumed'}
+              children={
+                <Icon
+                  name="apple"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                />
+              }
+              value={caloriesConsumed}
+            ></DailyStatusBlock>
+            <DailyStatusBlock
+              borderColor={'rgba(239, 237, 232, 0.20)'}
+              text={'Сalories burned'}
+              children={
+                <Icon
+                  name="fire"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                />
+              }
+              value={caloriesBurned}
+            ></DailyStatusBlock>
+            <DailyStatusBlock
+              borderColor={resultCalories ? '#3CBF61' : '#E9101D'}
+              text={'Сalories remaining'}
+              children={
+                <Icon
+                  name="bubble"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                />
+              }
+              value={caloriesRemaining}
+            ></DailyStatusBlock>
+            <DailyStatusBlock
+              borderColor={resultSports ? '#3CBF61' : '#E9101D'}
+              text={'Sports remaining'}
+              children={
+                <Icon
+                  name="running-figure"
+                  iconWidth={{ mobile: '20px', tablet: '20px' }}
+                  iconHeight={{ mobile: '20px', tablet: '20px' }}
+                  fill="#EF8964"
+                />
+              }
+              value={convertTime(sportsTime)}
+            ></DailyStatusBlock>
+          </BlockWrap>
+          <TextWrap>
+            <Icon
+              name="warning"
+              iconWidth={{ mobile: '24px', tablet: '24px' }}
+              iconHeight={{ mobile: '24px', tablet: '24px' }}
+            />
+            <Text>
+              Record all your meals in the calorie diary every day. This will
+              help you be aware of your nutrition and make informed choices.
+            </Text>
+          </TextWrap>
+        </DesktopWrap>
+        <InfoBoxes />
+      </MainDiaryWrap>
+    </>
+  );
+};
+
+export default Diary;

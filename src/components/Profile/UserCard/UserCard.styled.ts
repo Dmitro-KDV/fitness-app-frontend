@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { palette } from '../../../styles';
 
 const Wrap = styled.div`
   display: flex;
@@ -24,11 +25,11 @@ const ImgUserAvatar = styled.div`
 const WrapIcon = styled.div`
   width: 90px;
   height: 90px;
-  border: 2px solid #e6533c;
-  border-radius: 50%;
+  border: 2px solid ${palette.colors.orange};
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 50%;
 
   @media screen and (min-width: 769px) {
     width: 150px;
@@ -38,6 +39,7 @@ const WrapIcon = styled.div`
 
 const Img = styled.img`
   border-radius: 50%;
+
   @media screen and (min-width: 769px) {
   }
 `;
@@ -60,23 +62,23 @@ const InputFile = styled.input`
 const UserWrap = styled.div`
   text-align: center;
 `;
+
 const UserName = styled.h3`
-  font-size: 18px;
-  font-style: normal;
+  margin: 0 0 4px;
+  font-size: ${palette.fontSizes.small}px;
   font-weight: 400;
   line-height: 20px;
-  margin: 0 0 4px;
 
   @media screen and (min-width: 769px) {
-    font-size: 24px;
+    font-size: ${palette.fontSizes.medium}px;
     line-height: 28px;
     margin: 0 0 8px;
   }
 `;
 
 const UserStatus = styled.p`
-  color: rgba(239, 237, 232, 0.3);
-  font-size: 14px;
+  color: ${palette.colors.white30};
+  font-size: ${palette.fontSizes.tiny}px;
   line-height: 18px;
 `;
 
@@ -91,13 +93,14 @@ const BlockData = styled.div`
   width: 157px;
   height: 96px;
   padding: 13px;
-  border-radius: 12px;
-  border: 1px solid rgba(239, 237, 232, 0.2);
-  background: #e6533c;
+  border: 1px solid ${palette.colors.white20};
 
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+
+  border-radius: 12px;
+  background: ${palette.colors.orange};
 
   @media screen and (min-width: 769px) {
     width: 214px;
@@ -115,8 +118,8 @@ const TextBlockWrap = styled.div`
 `;
 
 const TitleBlock = styled.p`
-  font-size: 12px;
-  color: rgba(239, 237, 232, 0.8);
+  font-size: ${palette.fontSizes.caption}px;
+  color: ${palette.colors.white40};
   line-height: 16px;
 `;
 
@@ -127,23 +130,23 @@ const TextWrap = styled.div`
 `;
 
 const TextValue = styled.p`
-  font-size: 18px;
+  font-size: ${palette.fontSizes.small}px;
   font-weight: 700;
   line-height: 20px;
 
   @media screen and (min-width: 769px) {
-    font-size: 32px;
+    font-size: ${palette.fontSizes.large}px;
   }
 `;
 
 const Text = styled.p`
   width: 310px;
-  color: rgba(239, 237, 232, 0.3);
-  font-size: 14px;
+  color: ${palette.colors.white30};
+  font-size: ${palette.fontSizes.tiny}px;
   line-height: 18px;
 
   @media screen and (min-width: 769px) {
-    font-size: 16px;
+    font-size: ${palette.fontSizes.default}px;
     line-height: 24px;
     width: 410px;
   }

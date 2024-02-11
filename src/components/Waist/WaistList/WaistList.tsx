@@ -1,56 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../redux';
-import WaistItem from '../WaistItem/WaistItem';
-import { getWaistExercises } from '../../../redux/Waist';
-import {
-  ImgWaist,
-  NoExercisesTitle,
-  WaistItemUl,
-  WaistListContainer,
-} from './WaistList.styled';
-import images from '../../../assets/images/ImgForWelcomePage/imgForWelcomePage.jpg';
-import { WaistExercises } from '../../../redux/Waist/types';
-import { RootState } from '../../../redux/rootReducer';
-export interface WaistProps {
-  waistItem: WaistExercises;
-}
 
-const WaistList: React.FC<WaistProps> = () => {
+import NotFoundExercises from './NotFoundExercises';
+import WaistItem from '../WaistItem/WaistItem';
+import { BackButton } from '../../Exercises/BackButton';
+import { Loader } from '../..';
+import { WaistItemUl, WaistListContainer } from './WaistList.styled';
+
+import { getExercises, selectIsLoading } from '../../../redux/exercises';
+import { selectExercises, selectFilters } from '../../../redux/exercises';
+import { AppDispatch } from '../../../redux';
+
+const WaistList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const exercises = useSelector(selectExercises);
+  const filters = useSelector(selectFilters);
+  const isLoading = useSelector(selectIsLoading);
+  const [showNotFound, setShowNotFound] = useState(false);
 
   useEffect(() => {
-    dispatch(getWaistExercises({}));
-  }, [dispatch]);
-
-  const exercises = useSelector(
-    (state: RootState) => state.exercises.exercises
-  );
-  console.log(exercises);
-  const visibleExercises =
-    exercises &&
-    exercises.filter(
-      exercise =>
-        exercise.bodyPart ||
-        exercise.target ||
-        exercise.equipment === exercise.name
+    dispatch(
+      getExercises({
+        filter: 'choice',
+        category: filters.category,
+      })
     );
+  }, [dispatch, filters.category, filters.filter]);
+
+  useEffect(() => {
+    if (!exercises.length && !isLoading) {
+      const timeoutId = setTimeout(() => {
+        setShowNotFound(true);
+      }, 100);
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    } else {
+      setShowNotFound(false);
+    }
+  }, [exercises, isLoading]);
 
   return (
     <WaistListContainer>
-      <WaistItemUl>
-        {visibleExercises && visibleExercises.length ? (
-          visibleExercises
-            .slice(0, 50)
-            .map(el => <WaistItem key={el._id} waistItem={el} />)
-        ) : (
-          <NoExercisesTitle>
-            There is not exercises downloaded else, plaese try choose this
-            categorie later!!!
-          </NoExercisesTitle>
-        )}
+      <BackButton />
+      {showNotFound && <NotFoundExercises />}
+      <WaistItemUl className="scrollbar-outer">
+        {exercises.map((waistItem, key) => (
+          <WaistItem key={key} exercise={waistItem} />
+        ))}
+        {isLoading && <Loader />}
       </WaistItemUl>
-      <ImgWaist src={images} alt="image" />
     </WaistListContainer>
   );
 };

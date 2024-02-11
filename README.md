@@ -50,3 +50,10 @@
 - [Vitalii Malyk](https://github.com/Vitalii-Malyk)
 - [Oleksandr Lohvinenko](https://github.com/Alexblack19)
 - [Anton Zinchenko](https://github.com/AntonZinchenko32)
+
+<h2>Preview</h2>
+<img src="https://i.imgur.com/HQQ0fJp.png" alt="welcome page" />
+<img src="https://i.imgur.com/6twh5zi.png" alt="profile page" />
+<img src="https://i.imgur.com/UEjFN5P.png" alt="diary page" />
+<img src="https://i.imgur.com/ftQ80bc.png" alt="products page" />
+<img src="https://i.imgur.com/SKkmWH0.png" alt="exercises page" />
